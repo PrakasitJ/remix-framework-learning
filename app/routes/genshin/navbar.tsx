@@ -6,13 +6,13 @@ export default function Navbar() {
     <div className="w-full h-16 bg-genshin-nav-black/75 shadow-md">
       <div className="flex items-center">
         <NavIcon />
-        <NavButton text="HOME" link="/genshin"/>
-        <NavButton text="NEWS" link="/genshin"/>
-        <NavButton text="CHARACTERS" link="/genshin"/>
-        <NavButton text="EXPLORE" link="/genshin"/>
-        <NavButton text="HoYoLAB" link="/genshin"/>
-        <NavButton text="TOP-UP" link="/genshin"/>
-        <NavButton text="REDEEM CODE" link="/genshin"/>
+        <NavButton text="HOME" link="/genshin/character"/>
+        <NavButton text="NEWS" link="/genshin/character"/>
+        <NavButton text="CHARACTERS" link="/genshin/character"/>
+        <NavButton text="EXPLORE" link="/genshin/character"/>
+        <NavButton text="HoYoLAB" link="/genshin/character"/>
+        <NavButton text="TOP-UP" link="/genshin/character"/>
+        <NavButton text="REDEEM CODE" link="/genshin/character"/>
       </div>
     </div>
   );
