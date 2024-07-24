@@ -32,7 +32,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'build'  # Adjust this if your build directory is different
+          path: 'build/client'  # Adjust this if your build directory is different
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

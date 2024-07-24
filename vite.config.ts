@@ -6,6 +6,7 @@ export default defineConfig({
   base:"/remix-framework-learning",
   plugins: [
     remix({
+      ssr: false,
       basename:"/remix-framework-learning",
       future: {
         v3_fetcherPersist: true,
