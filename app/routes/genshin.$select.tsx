@@ -50,7 +50,9 @@ export default function CharacterSelect() {
   };
 
   const params = useParams();
-  const [character, setCharacter] = useState(initialImgSrc[params.select] || initialImgSrc["Jean"]);
+  const [character, setCharacter] = useState(
+    initialImgSrc[params.select] || initialImgSrc["Jean"]
+  );
   const [key, setKey] = useState(Date.now());
   const [isFadingOut, setIsFadingOut] = useState(false);
 
@@ -65,9 +67,41 @@ export default function CharacterSelect() {
     }
   }, [params.select]);
 
+  useEffect(() => {
+    // Connect to the WebSocket server
+    const socket = new WebSocket("ws://192.168.31.79:8080");
+    const reader = new FileReader();
+    socket.onmessage = (event) => {
+      const newMessage = event.data;
+      reader.readAsText(newMessage);
+      reader.onload = () => {
+        if (params.select && character !== initialImgSrc[reader.result]) {
+          setIsFadingOut(true);
+          setTimeout(() => {
+            setCharacter(initialImgSrc[reader.result] || initialImgSrc["Jean"]);
+            setKey(Date.now());
+            setIsFadingOut(false);
+          }, 400); // Match the duration of your exit animation
+        }
+      };
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+  const sendMessage = (name:String) => {
+    const socket = new WebSocket("ws://192.168.31.79:8080");
+    socket.onopen = () => {
+      socket.send(name);
+    };
+  };
+
   const handleCharacterClick = (name) => {
     if (character !== initialImgSrc[name]) {
       setIsFadingOut(true);
+      sendMessage(name);
       setTimeout(() => {
         setCharacter(initialImgSrc[name]);
         setKey(Date.now());
@@ -83,12 +117,16 @@ export default function CharacterSelect() {
           <div className="flex justify-center items-center">
             <img
               src={character.banner}
-              className={`relative z-10 translate-x-5 ${isFadingOut ? 'animate-fadeout' : 'animate-genshinBanner'}`}
+              className={`relative z-10 translate-x-5 ${
+                isFadingOut ? "animate-fadeout" : "animate-genshinBanner"
+              }`}
               key={key}
             />
             <img
               src={elementSrc[character.element]}
-              className={`opacity-15 absolute inset-0 flex justify-center items-center z-0 -translate-x-12 -translate-y-16 ${isFadingOut ? 'animate-fadeout' : 'animate-genshinElement'}`}
+              className={`opacity-15 absolute inset-0 flex justify-center items-center z-0 -translate-x-12 -translate-y-16 ${
+                isFadingOut ? "animate-fadeout" : "animate-genshinElement"
+              }`}
               key={key + "-element"}
             />
           </div>
@@ -96,7 +134,9 @@ export default function CharacterSelect() {
         <div className="col-span-9">
           <img
             src={character.character}
-            className={`object-cover sc ${isFadingOut ? 'animate-moveout' : 'animate-genshinCharacter'}`}
+            className={`object-cover sc ${
+              isFadingOut ? "animate-moveout" : "animate-genshinCharacter"
+            }`}
             key={key + "-character"}
           />
         </div>
